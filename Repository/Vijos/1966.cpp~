@@ -1,0 +1,14 @@
+#include<iostream>
+#include<cstdio>
+
+const int MAXN=200;
+const double eps=1e-6;
+
+double equ[MAXN][MAXN];
+
+int main()
+{
+	int i;
+
+	return 0;
+}
