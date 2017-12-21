@@ -39,6 +39,7 @@ int solve(int n,int k)
 	memset(f,0x3f,sizeof f);
 	f[0][0]=0;
 	
+	gcnt=0;memset(gid,0,sizeof gid);
 	for(i=2;i<=n;i++) if(i!=k)
 	{
 		if(mxPF[i]>31)
@@ -62,7 +63,7 @@ int solve(int n,int k)
 			for(int laS=aS;laS;laS=(laS-1)&aS)
 				umn(f[i][oS|laS],f[i-1][laS]+1);
 		}
-	return f[gcnt][aS];
+	return f[gcnt][aS]+int(k!=1);
 }
 
 int main()
