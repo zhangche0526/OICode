@@ -90,8 +90,6 @@ inline int qry(P p){ans=INF;calMnDis(rt,p);return ans;}
 
 int main()
 {
-//	freopen("angel18.in","r",stdin);
-//	freopen("my.out","w",stdout);
 	int i;
 	scanf("%d%d",&n,&m);
 	for(i=1;i<=n;i++) scanf("%d%d",&pt[i].x,&pt[i].y);
