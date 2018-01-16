@@ -7,4 +7,4 @@ Virgil's Code Repository for OI
 
 ## Blog
 
-[Virgil's Blog](zhangche0526.github.io)
+[Virgil's Blog](https://zhangche0526.github.io/)

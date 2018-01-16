@@ -43,7 +43,7 @@ int main()
 			madd(g[i+1][j][s],g[i][j][s]);
 			if((s&&a[i]<b[j])||(!s&&a[i]>b[j])) madd(h[i][j+1][s],g[i][j][s]);
 		}
-		if(h[i][j][s]) madd(h[i][j+1][s],h[i][j][s]);
+		madd(h[i][j+1][s],h[i][j][s]);
 	}
 	printf("%d",ans);
 	return 0;
