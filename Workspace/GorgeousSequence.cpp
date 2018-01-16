@@ -30,12 +30,12 @@ inline void upd(int o)
 	else if(lc.mx<rc.mx) t[o].mx=rc.mx,t[o].cnt=rc.cnt,t[o].nd=max(lc.mx,rc.nd);
 	else t[o].mx=lc.mx,t[o].cnt=lc.cnt+rc.cnt,t[o].nd=max(lc.nd,rc.nd);
 }
-inline void putTag(int o,int v){t[o].sum-=(ll)t[o].cnt*(t[o].mx-v),t[o].mx=v;}
+inline void exec(int o,int v){t[o].sum-=(ll)t[o].cnt*(t[o].mx-v),t[o].mx=v;}
 inline void psd(int o)//fake push_down, no push_down actually
 {
 	SEGTN &lc=t[t[o].lc],&rc=t[t[o].rc];
-	if(lc.mx>t[o].mx) putTag(t[o].lc,t[o].mx);
-	if(rc.mx>t[o].mx) putTag(t[o].rc,t[o].mx);
+	if(lc.mx>t[o].mx) exec(t[o].lc,t[o].mx);
+	if(rc.mx>t[o].mx) exec(t[o].rc,t[o].mx);
 }
 void buildTree(int o,int l,int r)
 {
@@ -51,7 +51,7 @@ void ch(int o,int l,int r,int v)
 {
 	if(v>=t[o].mx) return;
 	if(l<=t[o].l&&t[o].r<=r)
-		if(v>t[o].nd) {putTag(o,v);return;}
+		if(v>t[o].nd) {exec(o,v);return;}
 	psd(o);
 	int mid=(t[o].l+t[o].r)>>1;
 	if(l<=mid) ch(t[o].lc,l,r,v);
