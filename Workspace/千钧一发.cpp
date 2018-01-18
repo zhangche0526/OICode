@@ -1,26 +1,29 @@
 #include<iostream>
 #include<cstdio>
-#include<cstring>
 #include<queue>
+#include<cstring>
+#include<cmath>
+using std::floor;
 using std::min;
-
-const int MAXV=500,MAXE=6e4,INF=1061109567;
+typedef long long ll;
+int gcd(int a,int b){return b?gcd(b,a%b):a;}
+const int MAXN=1e3+100,MAXM=1e6+1e5,INF=1061109567;
 
 int S,T;
 
-struct E{int next,to,cap;} e[MAXE<<1];int ecnt=1,G[MAXV];
+struct E{int next,to,cap;} e[MAXM<<1];int ecnt=1,G[MAXN];
 void addEdge(int u,int v,int c)
-{
+{	
 	e[++ecnt]=(E){G[u],v,c};G[u]=ecnt;
 	e[++ecnt]=(E){G[v],u,0};G[v]=ecnt;
 }
 
 std::queue<int> que;
-int dpt[MAXV];
+int dpt[MAXN];
 bool calDpt()
 {
 	memset(dpt,-1,sizeof dpt);
-	dpt[S]=0;que.push(S);
+	que.push(S);dpt[S]=0;
 	while(!que.empty())
 	{
 		int u=que.front();que.pop();
@@ -35,7 +38,7 @@ bool calDpt()
 	return ~dpt[T];
 }
 
-int iter[MAXV];
+int iter[MAXN];
 int calF(int u,int f)
 {
 	if(u==T) return f;
@@ -64,19 +67,33 @@ int maxFlow()
 	return res;
 }
 
-int n,m,s,t;
 
+int n;
+int A[MAXN],B[MAXN];
+inline bool jud(int i,int j)
+{
+	double SAA=sqrt((ll)A[i]*A[i]+(ll)A[j]*A[j]);
+	if(floor(SAA)!=SAA) return true;
+	if(gcd(A[i],A[j])>1) return true;
+	return false;
+}
+inline void buildGraph()
+{
+	int i,j;S=n+1,T=n+2;
+	for(i=1;i<=n;i++)
+		if(A[i]&1) addEdge(S,i,B[i]);
+		else addEdge(i,T,B[i]);
+	for(i=1;i<=n;i++) if(A[i]&1)
+		for(j=1;j<=n;j++) if(!(A[j]&1))
+			if(!jud(i,j)) addEdge(i,j,INF);
+}
 int main()
 {
-	int i,w;scanf("%d%d%d%d",&n,&m,&s,&t);
-	S=n+1<<1,T=S+1;addEdge(S,s<<1,INF);addEdge(t<<1|1,T,INF);
-	for(i=1;i<=n;i++){scanf("%d",&w);addEdge(i<<1,i<<1|1,w);}
-	for(i=1;i<=m;i++)
-	{
-		int u,v;scanf("%d%d",&u,&v);
-		addEdge(u<<1|1,v<<1,INF);
-		addEdge(v<<1|1,u<<1,INF);
-	}
-	printf("%d",maxFlow());
+	int i,ans=0;scanf("%d",&n);
+	for(i=1;i<=n;i++) scanf("%d",A+i);
+	for(i=1;i<=n;i++) scanf("%d",B+i),ans+=B[i];
+	buildGraph();
+	ans-=maxFlow();
+	printf("%d",ans);
 	return 0;
 }
