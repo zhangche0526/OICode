@@ -1,114 +1,56 @@
-#include <cmath>
 #include <cstdio>
 #include <cstring>
-#include <iostream>
 #include <algorithm>
-#define M 30300
+#define mod 30031
 using namespace std;
-struct Block{
-    int a[200],size;
-    void Insert(int x)
-    {
-        int i;
-        ++size;
-        for(i=size;i>1&&a[i-1]>x;i--)
-            a[i]=a[i-1];
-        a[i]=x;
-    }
-    void Modify(int x,int y)
-    {
-        int temp=lower_bound(a+1,a+size+1,x)-a;
-        for(;temp<size&&a[temp+1]<y;temp++)
-            a[temp]=a[temp+1];
-        for(;temp>1&&a[temp-1]>y;temp--)
-            a[temp]=a[temp-1];
-        a[temp]=y;
-    }
-    int Query(int x)
-    {
-        int temp=upper_bound(a+1,a+size+1,x)-a;
-        return size-temp+1;
-    }
-}blocks[10000];
-struct abcd{
-    int to,next;
-}table[M<<2];
-int head[M<<1],block_head[M],tot;
-int n,m,block,ans,cnt;
-int a[M<<1],fa[M<<1],belong[M<<1];
-void Add(int _head[],int x,int y)
+int c[1030] , w[1030] , v[130] , n;
+struct data
 {
-    table[++tot].to=y;
-    table[tot].next=_head[x];
-    _head[x]=tot;
-}
-void DFS(int x)
+	int v[130][130];
+	data() {memset(v , 0 , sizeof(v));}
+	int *operator[](int a) {return v[a];}
+	data operator*(data &a)
+	{
+		data ans;
+		int i , j , k;
+		for(i = 1 ; i <= n ; i ++ )
+			for(j = 1 ; j <= n ; j ++ )
+				for(k = 1 ; k <= n ; k ++ )
+					ans[i][j] = (ans[i][j] + v[i][k] * a[k][j]) % mod;
+		return ans;
+	}
+}A;
+data pow(data x , int y)
 {
-    int i;
-    if(blocks[belong[fa[x]]].size==block)
-        blocks[belong[x]=++cnt].Insert(a[x]),Add(block_head,belong[fa[x]],cnt);
-    else
-        blocks[belong[x]=belong[fa[x]]].Insert(a[x]);
-    for(i=head[x];i;i=table[i].next)
-        if(table[i].to!=fa[x])
-            fa[table[i].to]=x,DFS(table[i].to);
+	data ans;
+	int i;
+	for(i = 1 ; i <= n ; i ++ ) ans[i][i] = 1;
+	while(y)
+	{
+		if(y & 1) ans = ans * x;
+		x = x * x , y >>= 1;
+	}
+	return ans;
 }
-void Block_DFS(int x,int y)
-{
-    int i;
-    ans+=blocks[x].Query(y);
-    for(i=block_head[x];i;i=table[i].next)
-        Block_DFS(table[i].to,y);
-}
-void DFS(int x,int y)
-{
-    int i;
-    if(a[x]>y) ++ans; 
-    for(i=head[x];i;i=table[i].next)
-        if(table[i].to!=fa[x])
-            if(belong[table[i].to]==belong[x])
-                DFS(table[i].to,y);
-            else
-                Block_DFS(belong[table[i].to],y);
- 
-}
- 
 int main()
 {
-    int i,j,x,y,p;
-    cin>>n;
-    for(i=1;i<n;i++)
-        scanf("%d%d",&x,&y),Add(head,x,y),Add(head,y,x);
-    for(i=1;i<=n;i++)
-        scanf("%d",&a[i]);
-    block=static_cast<int>(sqrt(n)+1e-7);
-    DFS(1);
-    cin>>m;
-    for(i=1;i<=m;i++)
-    {
-        scanf("%d%d%d",&p,&x,&y);
-        x^=ans;y^=ans;
-        switch(p)
-        {
-            case 0:
-                ans=0;
-                DFS(x,y);
-                printf("%d\n",ans);
-                break;
-            case 1:
-                blocks[belong[x]].Modify(a[x],y);
-                a[x]=y;
-                break;
-            case 2:
-                a[++n]=y;
-                Add(head,x,n);
-                fa[n]=x;
-                if(blocks[belong[x]].size==block)
-                    blocks[belong[n]=++cnt].Insert(y),Add(block_head,belong[x],cnt);
-                else
-                    blocks[belong[n]=belong[x]].Insert(y);
-                break;
-        }
-    }
-    return 0;
+	int m , k , p , i , j;
+	scanf("%d%d%d" , &m , &k , &p);
+	for(i = 1 ; i < (1 << p) ; i ++ )
+	{
+		c[i] = c[i - (i & -i)] + 1;
+		if(c[i] == k && i & (1 << (p - 1))) w[i] = ++n , v[n] = i;
+	}
+	for(i = 1 ; i <= n ; i ++ )
+	{
+		if(v[i] & 1) A[i][w[(1 << (p - 1)) | (v[i] >> 1)]] = 1;
+		else
+			for(j = 0 ; j < p ; j ++ )
+				if(v[i] & (1 << j))
+					A[i][w[(1 << (p - 1)) | ((v[i] ^ (1 << j)) >> 1)]] = 1;
+	}
+	A = pow(A , m - k);
+	i = w[(1 << p) - (1 << (p - k))];
+	printf("%d\n" , A[i][i]);
+	return 0;
 }

@@ -1,25 +1,22 @@
 #include<iostream>
 #include<cstdio>
-#include<queue>
 #include<cstring>
-#include<cmath>
-using std::floor;
+#include<queue>
 using std::min;
-typedef long long ll;
-int gcd(int a,int b){return b?gcd(b,a%b):a;}
-const int MAXN=3e3+300,MAXM=3e6,INF=1061109567;
+
+const int MAXV=1e5+5,MAXE=1e6+5,INF=1061109567;
 
 int S,T;
 
-struct E{int next,to,cap;} e[MAXM<<1];int ecnt=1,G[MAXN];
+struct E{int next,to,cap;} e[MAXE<<1];int ecnt=1,G[MAXV];
 void addEdge(int u,int v,int c)
-{	
+{
 	e[++ecnt]=(E){G[u],v,c};G[u]=ecnt;
 	e[++ecnt]=(E){G[v],u,0};G[v]=ecnt;
 }
 
 std::queue<int> que;
-int dpt[MAXN];
+int dpt[MAXV];
 bool calDpt()
 {
 	memset(dpt,-1,sizeof dpt);
@@ -38,7 +35,7 @@ bool calDpt()
 	return ~dpt[T];
 }
 
-int iter[MAXN];
+int iter[MAXV];
 int calF(int u,int f)
 {
 	if(u==T) return f;
@@ -67,32 +64,40 @@ int maxFlow()
 	return res;
 }
 
+const int MAXN=45;
 
-int n;
-int A[MAXN];
-inline bool jud(int i,int j)
-{
-	double SAA=sqrt((ll)A[i]*A[i]+(ll)A[j]*A[j]);
-	if(floor(SAA)!=SAA) return true;
-	if(gcd(A[i],A[j])>1) return true;
-	return false;
-}
+int P,Q,R,D;
+int id[MAXN][MAXN][MAXN],idcnt;
+int W[MAXN][MAXN][MAXN];
+
 inline void buildGraph()
 {
-	int i,j;S=n+1,T=n+2;
-	for(i=1;i<=n;i++)
-		if(A[i]&1) addEdge(S,i,A[i]);
-		else addEdge(i,T,A[i]);
-	for(i=1;i<=n;i++) if(A[i]&1)
-		for(j=1;j<=n;j++) if(!(A[j]&1))
-			if(!jud(i,j)) addEdge(i,j,INF);
+	int x,y,z;S=id[P][Q][R]+1,T=S+1;
+	for(y=1;y<=Q;y++) for(x=1;x<=P;x++)
+		addEdge(S,id[x][y][0],INF),addEdge(id[x][y][R],T,INF);
+	for(z=1;z<=R;z++) for(y=1;y<=Q;y++) for(x=1;x<=P;x++)
+	{
+		addEdge(id[x][y][z-1],id[x][y][z],W[x][y][z]);
+		if(z>D)
+		{
+			if(x>1) addEdge(id[x][y][z],id[x-1][y][z-D],INF);
+			if(x<P) addEdge(id[x][y][z],id[x+1][y][z-D],INF);
+			if(y>1) addEdge(id[x][y][z],id[x][y-1][z-D],INF);
+			if(y<Q) addEdge(id[x][y][z],id[x][y+1][z-D],INF);
+		}
+	}
 }
+
 int main()
 {
-	int i,ans=0;scanf("%d",&n);
-	for(i=1;i<=n;i++) scanf("%d",A+i),ans+=A[i];
+	scanf("%d%d%d%d",&P,&Q,&R,&D);
+	int x,y,z;
+	for(z=0;z<=R;z++) for(y=1;y<=Q;y++) for(x=1;x<=P;x++)
+	{
+		id[x][y][z]=++idcnt;
+		if(z) scanf("%d",&W[x][y][z]);
+	}
 	buildGraph();
-	ans-=maxFlow();
-	printf("%d",ans);
+	printf("%d",maxFlow());
 	return 0;
 }
