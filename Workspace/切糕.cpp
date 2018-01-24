@@ -72,7 +72,7 @@ int W[MAXN][MAXN][MAXN];
 
 inline void buildGraph()
 {
-	int x,y,z;S=id[P][Q][R]+1,T=S+1;
+	int x,y,z;S=idcnt+1,T=S+1;
 	for(y=1;y<=Q;y++) for(x=1;x<=P;x++)
 		addEdge(S,id[x][y][0],INF),addEdge(id[x][y][R],T,INF);
 	for(z=1;z<=R;z++) for(y=1;y<=Q;y++) for(x=1;x<=P;x++)

@@ -1,0 +1,9 @@
+MANIFEST.in
+README.md
+setup.py
+BZOJCmd.egg-info/PKG-INFO
+BZOJCmd.egg-info/SOURCES.txt
+BZOJCmd.egg-info/dependency_links.txt
+BZOJCmd.egg-info/top_level.txt
+bzoj/__init__.py
+bzoj/bzoj.py

@@ -75,4 +75,3 @@ int main()
     ntt.mul(a,n,b,m,ans);
     for(i=0;i<=n+m;i++) printf("%d ",ans[i]);
 }
-

@@ -1,0 +1,58 @@
+1516626182007	geckodriver	INFO	geckodriver 0.19.1
+1516626182034	geckodriver	INFO	Listening on 127.0.0.1:44520
+1516626183308	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "-marionette" "-profile" "/tmp/rust_mozprofile.scDT1IDKdc8A"
+1516626186881	addons.xpi	WARN	Add-on langpack-zh-TW@firefox.mozilla.org is not compatible with application version.
+1516626186896	addons.xpi	WARN	Add-on langpack-zh-TW@firefox.mozilla.org is not compatible with application version.
+1516626186896	addons.xpi	WARN	Add-on langpack-zh-TW@firefox.mozilla.org is not compatible with application version.
+1516626187946	Marionette	INFO	Enabled via --marionette
+
+(firefox:32203): GLib-GObject-CRITICAL **: g_object_ref: assertion 'object->ref_count > 0' failed
+
+(firefox:32203): GLib-GObject-CRITICAL **: g_object_unref: assertion 'object->ref_count > 0' failed
+
+(firefox:32203): GLib-GObject-CRITICAL **: g_object_ref: assertion 'object->ref_count > 0' failed
+
+(firefox:32203): GLib-GObject-CRITICAL **: g_object_unref: assertion 'object->ref_count > 0' failed
+
+(firefox:32203): GLib-GObject-CRITICAL **: g_object_ref: assertion 'object->ref_count > 0' failed
+
+(firefox:32203): GLib-GObject-CRITICAL **: g_object_unref: assertion 'object->ref_count > 0' failed
+1516626188491	addons.xpi	WARN	Add-on langpack-zh-TW@firefox.mozilla.org is not compatible with application version.
+1516626188492	addons.xpi	WARN	Add-on langpack-zh-TW@firefox.mozilla.org is not compatible with application version.
+1516626188494	addons.xpi	WARN	Add-on langpack-zh-TW@firefox.mozilla.org is not compatible with application version.
+1516626188693	addons.xpi	WARN	Add-on langpack-zh-TW@firefox.mozilla.org is not compatible with application version.
+
+(/usr/lib/firefox/firefox:32301): GLib-GObject-CRITICAL **: g_object_ref: assertion 'object->ref_count > 0' failed
+
+(/usr/lib/firefox/firefox:32301): GLib-GObject-CRITICAL **: g_object_unref: assertion 'object->ref_count > 0' failed
+
+(/usr/lib/firefox/firefox:32301): GLib-GObject-CRITICAL **: g_object_ref: assertion 'object->ref_count > 0' failed
+
+(/usr/lib/firefox/firefox:32301): GLib-GObject-CRITICAL **: g_object_unref: assertion 'object->ref_count > 0' failed
+
+(/usr/lib/firefox/firefox:32301): GLib-GObject-CRITICAL **: g_object_ref: assertion 'object->ref_count > 0' failed
+
+(/usr/lib/firefox/firefox:32301): GLib-GObject-CRITICAL **: g_object_unref: assertion 'object->ref_count > 0' failed
+1516626196253	Marionette	INFO	Listening on port 34866
+1516626196523	Marionette	WARN	TLS certificate errors will be ignored for this session
+1516626196598	Marionette	DEBUG	Register listener.js for window 2147483649
+1516626197498	Marionette	DEBUG	Received DOM event "beforeunload" for "about:blank"
+1516626198279	Marionette	DEBUG	Received DOM event "pagehide" for "about:blank"
+1516626198280	Marionette	DEBUG	Received DOM event "unload" for "about:blank"
+1516626200775	Marionette	DEBUG	Received DOM event "DOMContentLoaded" for "http://www.lydsy.com/JudgeOnline/loginpage.php"
+1516626201551	Marionette	DEBUG	Received DOM event "pageshow" for "http://www.lydsy.com/JudgeOnline/loginpage.php"
+1516626201744	Marionette	DEBUG	Received DOM event "beforeunload" for "http://www.lydsy.com/JudgeOnline/loginpage.php"
+1516626203060	Marionette	DEBUG	Received DOM event "pagehide" for "http://www.lydsy.com/JudgeOnline/loginpage.php"
+1516626203060	Marionette	DEBUG	Received DOM event "unload" for "http://www.lydsy.com/JudgeOnline/loginpage.php"
+1516626203066	Marionette	DEBUG	Received DOM event "DOMContentLoaded" for "http://www.lydsy.com/JudgeOnline/login.php"
+1516626203069	Marionette	DEBUG	Received DOM event "pageshow" for "http://www.lydsy.com/JudgeOnline/login.php"
+1516626203090	Marionette	DEBUG	Received DOM event "beforeunload" for "http://www.lydsy.com/JudgeOnline/login.php"
+1516626203479	Marionette	DEBUG	Received DOM event "pagehide" for "http://www.lydsy.com/JudgeOnline/login.php"
+1516626203479	Marionette	DEBUG	Received DOM event "unload" for "http://www.lydsy.com/JudgeOnline/login.php"
+1516626203594	Marionette	DEBUG	Received DOM event "DOMContentLoaded" for "http://www.lydsy.com/JudgeOnline/problem.php?id=4212"
+1516626203832	Marionette	DEBUG	Received DOM event "pageshow" for "http://www.lydsy.com/JudgeOnline/problem.php?id=4212"
+1516626699815	addons.xpi	WARN	Add-on langpack-zh-TW@firefox.mozilla.org is not compatible with application version.
+1516626699824	addons.xpi	WARN	Add-on langpack-zh-TW@firefox.mozilla.org is not compatible with application version.
+1516626818181	addons.xpi	WARN	Add-on langpack-zh-TW@firefox.mozilla.org is not compatible with application version.
+g_dbus_connection_real_closed: Remote peer vanished with error: Underlying GIOStream returned 0 bytes on an async read (g-io-error-quark, 0). Exiting.
+g_dbus_connection_real_closed: Remote peer vanished with error: Underlying GIOStream returned 0 bytes on an async read (g-io-error-quark, 0). Exiting.

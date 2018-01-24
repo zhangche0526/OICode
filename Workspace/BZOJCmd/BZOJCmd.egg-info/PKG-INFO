@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: BZOJCmd
+Version: 0.1
+Summary: A BZOJ crawer on Linux
+Home-page: https://zhangche0526.github.io
+Author: Virgil von Einzbern
+Author-email: zhangche0526@gmail.com
+License: MIT
+Description: Read&Submit problems of BZOJ in Command Line
+Platform: Linux
