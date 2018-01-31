@@ -19,7 +19,7 @@ inline int pdis(P a,P b){return abs(a.x-b.x)+abs(a.y-b.y);}
 
 #define lc c[0]
 #define rc c[1]
-int rt=1;
+int rt;
 struct KDTN
 {
 	int c[2];
@@ -29,7 +29,7 @@ struct KDTN
 } t[MAXN<<1];int tcnt;
 
 bool dms;
-inline bool cmp(const P &a,const P &b)
+bool cmp(const P &a,const P &b)
 {
 	if(dms) return a.y<b.y||(a.y==b.y&&a.x<b.x);
 	return a.x<b.x||(a.x==b.x&&a.y<b.y);
@@ -55,25 +55,26 @@ inline void upd(int o)
 
 void buildTree(int &o,int l,int r,int d)
 {
-	if(l>=r) return;
+	if(l>r) return;
 	if(!o) o=++tcnt;
 	dms=d;
 	int mid=(l+r)>>1;
-	std::nth_element(pt+l,pt+mid,pt+r,cmp);
+	std::nth_element(pt+l,pt+mid,pt+r+1,cmp);
 	t[o]=KDTN(pt[mid]);
-	buildTree(t[o].lc,l,mid,d^1);
+	buildTree(t[o].lc,l,mid-1,d^1);
 	buildTree(t[o].rc,mid+1,r,d^1);
 	upd(o);
 }
-int ans;
-void calMnDis(int o,P p)
+
+int calMnDis(int o,P p)
 {
-	if(!o) return;
-	umn(ans,pdis(p,t[o].p));
-	int d=rdis(t[o].lc,p)>rdis(t[o].rc,p);
-	calMnDis(t[o].c[d],p);
-	if(rdis(t[o].c[d^1],p)<ans)
-		calMnDis(t[o].c[d^1],p);
+	if(!o) return INF;
+	int res=pdis(p,t[o].p);
+	int c=rdis(t[o].lc,p)>rdis(t[o].rc,p);
+	umn(res,calMnDis(t[o].c[c],p));
+	if(rdis(t[o].c[c^1],p)<res)
+		umn(res,calMnDis(t[o].c[c^1],p));
+	return res;
 }
 
 void addPt(int &o,P p)
@@ -86,15 +87,15 @@ void addPt(int &o,P p)
 
 inline void initKDT(){t[0].mnp=P(INF,INF),t[0].mxp=P(-INF,-INF);}
 inline void mdf(P p){dms=0;addPt(rt,p);}
-inline int qry(P p){ans=INF;calMnDis(rt,p);return ans;}
+inline int qry(P p){return calMnDis(rt,p);}
 
 int main()
 {
 	int i;
 	scanf("%d%d",&n,&m);
 	for(i=1;i<=n;i++) scanf("%d%d",&pt[i].x,&pt[i].y);
-	initKDT();int tmp=0;
-	buildTree(tmp,1,n+1,0);
+	initKDT();
+	buildTree(rt,1,n,0);
 	for(i=1;i<=m;i++)
 	{
 		int opt;P p;scanf("%d%d%d",&opt,&p.x,&p.y);
@@ -103,3 +104,4 @@ int main()
 	}
 	return 0;
 }
+
