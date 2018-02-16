@@ -18,7 +18,7 @@ void tarjan(int u,int fa)
 	for(i=G[u];i;i=e[i].next)
 	{
 		int v=e[i].to;
-		if(!dfn(v))
+		if(!dfn[v])
 		{
 			st.push((E){0,u,v});
 			dfs(v,u);
