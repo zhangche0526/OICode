@@ -16,7 +16,8 @@ void addEdge(int u,int v,int w){e[++ecnt]=(E){G[u],v,w};G[u]=ecnt;}
 void addEdge2(int u,int v,int w){addEdge(u,v,w);addEdge(v,u,w);}
 
 bool vis[MAXN];int rt;
-int sz[MAXN],mxv[MAXN],mnv;
+int mxv[MAXN],mnv,sz[MAXN];
+
 void calSz(int u,int la)
 {
 	sz[u]=1,mxv[u]=0;
@@ -30,7 +31,7 @@ void calSz(int u,int la)
 	}
 }
 
-void calRt(int r,int u,int la)
+void calRt(int u,int la,int r)
 {
 	umx(mxv[u],sz[r]-sz[u]);
 	if(mxv[u]<mnv) mnv=mxv[u],rt=u;
@@ -38,7 +39,7 @@ void calRt(int r,int u,int la)
 	{
 		int v=e[i].to;
 		if(v==la||vis[v]) continue;
-		calRt(r,v,u);
+		calRt(v,u,r);
 	}
 }
 
@@ -54,46 +55,39 @@ void calDis(int u,int la,int d)
 	}
 }
 
-int k;
-int calc(int u,int d)
+void upd(int u,int d,int flg)
 {
-	int res0=0,res1=0;dcnt=0;
-	calDis(u,d,0);
+	dcnt=0;calDis(u,0,d);
 	std::sort(dis+1,dis+dcnt+1);
-	int l,r;
-	for(l=1,r=dcnt;l<r;l++)
-	{
-		while(dis[l]+dis[r]>=k&&l<r) r--;
-		res0+=r-l;
-	}
-	for(l=1,r=dcnt;l<r;l++)
-	{
-		while(dis[l]+dis[r]>k&&l<r) r--;
-		res1+=r-l;
-	}
-	return res1-res0;
-}
-
-void dc(int u)
-{
-	int i,j;mnv=n;
-	calSz(u,0);calRt(u,u,0);
+	int i,k;
 	for(i=1;i<=q;i++)
 	{
-		k=qry[i];
-		ans[i]+=calc(rt,0);
+		int l,r;k=qry[i];
+		int cnt0=0,cnt1=0;
+		for(l=1,r=dcnt;l<r;l++)
+		{
+			while(dis[l]+dis[r]>=k&&l<r) r--;
+			cnt0+=r-l;
+		}
+		for(l=1,r=dcnt;l<r;l++)
+		{
+			while(dis[l]+dis[r]>k&&l<r) r--;
+			cnt1+=r-l;
+		}
+		ans[i]+=flg*(cnt1-cnt0);
 	}
-	vis[rt]=true;
-	for(i=G[u];i;i=e[i].next)
+}
+
+void treeDC(int u)
+{
+	mnv=n;calSz(u,0);calRt(u,0,u);
+	upd(rt,0,1);vis[rt]=true;
+	for(int i=G[rt];i;i=e[i].next)
 	{
 		int v=e[i].to;
 		if(vis[v]) continue;
-		for(j=1;j<=q;j++)
-		{
-			k=qry[j];
-			ans[j]-=calc(v,e[i].val);
-		}
-		dc(v);
+		upd(v,e[i].val,-1);
+		treeDC(v);
 	}
 }
 
@@ -106,23 +100,9 @@ int main()
 		addEdge2(u,v,w);
 	}
 	for(i=1;i<=q;i++) scanf("%d",qry+i);
-	dc(1);
+	treeDC(1);
 	for(i=1;i<=q;i++)
 		if(qry[i]) puts(ans[i]?"Yes":"No");
 		else puts("Yes");
 	return 0;
 }
-/*
-6 5 
-1 2 5 
-1 3 7 
-1 4 1 
-3 5 2 
-3 6 3 
-1
-8 
-13 
-14 
-0
-*/
-
