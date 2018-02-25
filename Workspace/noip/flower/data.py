@@ -1,40 +1,39 @@
-import random
+from cyaron import *
 
-out_file = open("flower3.in","w")
+_n = [0, 2, 4, 6, 8, 9, 10, 123, 234, 345, 456, 121, 232, 343, 454, 122, 233, 344, 433, 455, 500]
+_m = ati([0, 1, 5, 8, 15, 20, 22, 122, 233, 344, 455, 121, 232, 343, 454, 4000, 1e4, 3e4, 5e4, 8e4, 1e5])
+_t = [0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0]
+for T in range(1, 21):
+    print T
+    test_data = IO(file_prefix="flower", data_id=T)
 
+    n = _n[T]
+    m = _m[T]
+    t = _t[T]
 
-MAXN = 10
-MAXW = 1000
-
-n = random.randint(MAXN*0.9,MAXN)
-m = 0
-'''
-out_file.write(str(n)+" "+str(m)+"\n")
-
-lst = range(2,n)
-random.shuffle(lst)
-lst.append(1)
-lst.append(n)
-lst.append(lst[0])
-for i in range(1,len(lst)):
-    u = lst[i-1]
-    v = lst[i]
-    w = random.randint(1,MAXW)
-    out_file.write(str(u)+" "+str(v)+" "+str(w)+"\n")
-'''
-G = [(0,0,0)]
-del G[0]
-
-rate = random.uniform(0.3,0.9)
-
-for u in range(1,n):
-    for v in range(u+1,n+1):
-        tmp = random.uniform(0,1)
-        if tmp < rate:
-            w = random.randint(1,MAXW)
-            G.append((u,v,w))
+    if t == 1:
+        graph = Graph.chain(n, weight_limit=1000)
+    elif t   == 2:
+        graph = Graph.chain(n, weight_limit=1000)
+        graph.add_edge(1, n, weight=randint(1,1000))
+    else:
+        tree = Graph.tree(n, 0.3, 0.3, weight_limit=1000)
+        exG = Graph.graph(n, m-n+1, self_loop=False, repeated_edges=False, weight_limit=1000)
+        graph = Graph(n)
+        m = 0
+        for t_e in tree.iterate_edges():
+            exist = False
+            for g_e in exG.edges[t_e.start]:
+                if t_e.end == g_e.end:
+                    exist = True
+                    break
+            if exist == False:
+                graph.add_edge(t_e.start, t_e.end, weight=t_e.weight)
+                m += 1
+        for e in exG.iterate_edges():
+            graph.add_edge(e.start, e.end, weight=e.weight)
             m += 1
-out_file.write(str(n)+" "+str(m)+"\n")
-random.shuffle(G)
-for i in range(0,len(G)):
-    out_file.write(str(G[i][0])+" "+str(G[i][1])+" "+str(G[i][2])+"\n")
+    
+    test_data.input_writeln(n, m)
+
+    test_data.input_writeln(graph.to_str(shuffle=True))
