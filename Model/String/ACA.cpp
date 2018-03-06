@@ -59,7 +59,7 @@ struct ACA
 
 	void getFail()
 	{
-		std::queue<int> que;
+		static std::queue<int> que;
 		f[0]=0;
 		for(int c=0;c<SIGMA_SIZE;c++)
 		{
@@ -68,16 +68,16 @@ struct ACA
 		}
 		while(!que.empty())
 		{
-			int r=que.front();que.pop();
+			int u=que.front();que.pop();
 			for(int c=0;c<SIGMA_SIZE;c++)
 			{
-				int u=ch[r][c];
-				if(!u) continue;
-				que.push(u);
-				int v=f[r];
-				while(v&&!ch[v][c]) v=f[v];
-				f[u]=ch[v][c];
-				last[u]=val[f[u]]?f[u]:last[f[u]];
+				int v=ch[u][c];
+				if(!v) continue;
+				que.push(v);
+				int fu=f[u];
+				while(fu&&!ch[fu][c]) fu=f[fu];
+				f[v]=ch[fu][c];
+				last[v]=val[f[v]]?f[v]:last[f[v]];
 			}
 		}
 	}
