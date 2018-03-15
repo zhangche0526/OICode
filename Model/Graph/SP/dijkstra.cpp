@@ -14,7 +14,7 @@ void dijkstra(int v0)
 	int i;std::fill(dis+1,dis+N+1,INF);
 	dis[v0]=0;heap.push((HN){v0,0});
 	while(!heap.empty())
-	{
+	{	
 		int u=heap.top().id;heap.pop();
 		if(inS[u]) continue;inS[u]=true;
 		for(i=G[u];i;i=e[i].next)

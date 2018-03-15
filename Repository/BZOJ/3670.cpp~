@@ -28,6 +28,7 @@ void dfs(int u)
         int v=e[i].to;
         num[v]=std::upper_bound(st+1,st+tp+1,v>>1)-st-1;
         dfs(v);
+ 
     }
     tp--;
 }
