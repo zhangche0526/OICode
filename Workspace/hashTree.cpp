@@ -55,7 +55,7 @@ ll hash(string s)
 
 int main()
 {
-	int n,m,i;cin>>n>>m; 
+	int n,m,i;cin>>n>>m;
 	for(i=1;i<=n;i++)
 	{
 		string p,m;cin>>p>>m;

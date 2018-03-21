@@ -41,7 +41,7 @@ ll S[MAXN];
 int main()
 {
 	int i;scanf("%d",&n);
-	for(i=1;i<=n;i++) scanf("%lld",S+i);
+	for(i=1;i<=n;i++) scanf("%d",S+i);
 	static LB lb(S,n);
 	printf("%lld",lb.calMxXor());
 }
