@@ -1,49 +1,57 @@
-#include <iostream>
-#include <cstdio>
-#include <cstring>
-#include <algorithm>
-#include <cmath>
-using namespace std;
-typedef long long ll;
-const int N = 1005, mo = 1e9+7;
-inline int read() {
-    char c=getchar(); int x=0,f=1;
-    while(c<'0'||c>'9') {if(c=='-')f=-1;c=getchar();}
-    while(c>='0'&&c<='9') {x=x*10+c-'0';c=getchar();}
-    return x*f;
+#include<iostream>
+#include<cstdio>
+#include<cstring>
+
+const int MAXN=10,P=1e9+7;
+
+int n;
+int mp[MAXN];
+int f[MAXN][2000],ans[MAXN],szPrd[MAXN];
+
+int U;
+inline void solve()
+{ 
+	int i;memset(ans,0,sizeof ans);
+	ans[0]=0;ans[1]=1;ans[n+1]=U;
+	for(int sz=2;sz<=n;sz++)
+	{
+		szPrd[0]=1;for(i=1;i<=n;i++) szPrd[i]=szPrd[i-1]*sz;
+		memset(f,0,sizeof f);f[0][0]=1;
+		for(i=0;i<n;i++)
+			for(int S=0;S<1<<sz;S++) if(f[i][S])
+				for(int k=0;k<1<<n;k++) if(!(mp[i+1]&k))
+				{
+					int nxt=0;
+					for(int tmp=k,j=1;j+sz-1<=n;j++,tmp>>=1)
+					{
+						int now=(((tmp&((1<<sz)-1))==(1<<sz)-1)?(S/szPrd[j-1]%sz+1):0); 
+						if(now>=sz){ nxt=-1; break; }
+						nxt+=now*szPrd[j-1];
+					}
+					if(~nxt) f[i+1][nxt]=(f[i+1][nxt]+f[i][S])%P;
+				}
+		for(int S=0;S<1<<sz;S++) ans[sz]=(ans[sz]+f[n][S])%P;
+	}
+	for(i=0;i<=n;i++) printf("%d\n",((ans[i+1]-ans[i])%P+P)%P);
 }
 
-int n, m; char str[20], c[10] = "ACGT";
-int trans[1<<15][4], f[2][1<<15];
-void init() {
-    static int d[20], g[20];
-    for(int s=0; s < 1<<n; s++) {
-        for(int j=0; j<n; j++) d[j+1] = d[j] + bool(s & (1<<j));
-        for(int k=0; k<4; k++) {
-            for(int j=1; j<=n; j++) {
-                g[j] = max(g[j-1], d[j]);
-                if(c[k] == str[j]) g[j] = max(g[j], d[j-1]+1);
-            }
-            trans[s][k] = 0;
-            for(int j=0; j<n; j++) if(g[j+1] - g[j]) trans[s][k] |= 1<<j; 
-        }
-    }
+int main()
+{
+	int T;scanf("%d",&T);
+	while(T--)
+	{
+		int i,j;scanf("%d",&n);
+		memset(mp,0,sizeof mp);U=1;
+		for(i=1;i<=n;i++)
+			for(j=1;j<=n;j++)
+			{
+				char c;
+				do c=getchar();while(c!='o'&&c!='*');
+				if(c=='o') (U<<=1)%=P;
+				else mp[i]|=1<<j-1;
+			}
+		solve();
+	}
+	return 0;
 }
-int ans[N];
-int main() {
-    int T = read();
-    while(T--) {
-        scanf("%s", str+1); m = read(); n = strlen(str+1);
-        init();
-        memset(ans, 0, sizeof(ans));
-        memset(f, 0, sizeof(f));
-        f[0][0] = 1; int p = 0;
-        for(int i=1; i<=m; i++, p ^= 1) {
-            memset(f[p^1], 0, sizeof(f[p^1]));
-            for(int s=0; s < 1<<n; s++)
-                for(int k=0; k<4; k++) (f[p^1][trans[s][k]] += f[p][s]) %= mo;
-        }
-        for(int s=0; s < 1<<n; s++) (ans[__builtin_popcount(s)] += f[p][s]) %= mo;
-        for(int i=0; i<=n; i++) printf("%d\n", ans[i]);
-    }
-}
+
