@@ -1,57 +1,54 @@
-#include<iostream>
-#include<cstdio>
-#include<cstring>
-
-const int MAXN=10,P=1e9+7;
-
-int n;
-int mp[MAXN];
-int f[MAXN][2000],ans[MAXN],szPrd[MAXN];
-
-int U;
-inline void solve()
-{ 
-	int i;memset(ans,0,sizeof ans);
-	ans[0]=0;ans[1]=1;ans[n+1]=U;
-	for(int sz=2;sz<=n;sz++)
-	{
-		szPrd[0]=1;for(i=1;i<=n;i++) szPrd[i]=szPrd[i-1]*sz;
-		memset(f,0,sizeof f);f[0][0]=1;
-		for(i=0;i<n;i++)
-			for(int S=0;S<1<<sz;S++) if(f[i][S])
-				for(int k=0;k<1<<n;k++) if(!(mp[i+1]&k))
-				{
-					int nxt=0;
-					for(int tmp=k,j=1;j+sz-1<=n;j++,tmp>>=1)
-					{
-						int now=(((tmp&((1<<sz)-1))==(1<<sz)-1)?(S/szPrd[j-1]%sz+1):0); 
-						if(now>=sz){ nxt=-1; break; }
-						nxt+=now*szPrd[j-1];
-					}
-					if(~nxt) f[i+1][nxt]=(f[i+1][nxt]+f[i][S])%P;
-				}
-		for(int S=0;S<1<<sz;S++) ans[sz]=(ans[sz]+f[n][S])%P;
-	}
-	for(i=0;i<=n;i++) printf("%d\n",((ans[i+1]-ans[i])%P+P)%P);
-}
-
+#include<bits/stdc++.h>
+using namespace std;
+int n,m,k,v[20],a[200010],L[200010][20],R[200010][20],f[300000],g[300000],w[200010];
 int main()
 {
-	int T;scanf("%d",&T);
-	while(T--)
+	int i,j,x;
+	scanf("%d%d",&n,&m);
+	for(i=1;i<=n;i++)
+		scanf("%d",&a[i]);
+	v[0]=m;
+	while(v[k])
+		v[++k]=v[k-1]/2;
+	for(i=0;i<=k;i++)
 	{
-		int i,j;scanf("%d",&n);
-		memset(mp,0,sizeof mp);U=1;
-		for(i=1;i<=n;i++)
-			for(j=1;j<=n;j++)
+		for(j=x=1;j<=n;j++)
+		{
+			if(j>1 && a[j]-a[j-1]>v[i])
+				x=j;
+			L[j][i]=x;
+		}
+		for(j=x=n;j>0;j--)
+		{
+			if(j<n && a[j+1]-a[j]>v[i])
+				x=j;
+			R[j][i]=x;
+		}
+		R[n+1][i]=n+1;
+	}
+	for(i=0;i<(1<<k);i++)
+		g[i]=n+1;
+	for(i=1;i<(1<<k);i++)
+		for(j=1;j<=k;j++)
+			if(i&(1<<j-1))
 			{
-				char c;
-				do c=getchar();while(c!='o'&&c!='*');
-				if(c=='o') (U<<=1)%=P;
-				else mp[i]|=1<<j-1;
+				f[i]=max(f[i],R[f[i^(1<<j-1)]+1][j]);
+				g[i]=min(g[i],L[g[i^(1<<j-1)]-1][j]);
 			}
-		solve();
+	for(i=0;i<(1<<k);i++)
+	{
+		j=L[g[i]-1][0];
+		x=R[f[(1<<k)-1^i]+1][0];
+		if(j<=x)
+			w[j]++,w[x+1]--;
+	}
+	for(i=1,x=0;i<=n;i++)
+	{
+		x+=w[i];
+		if(x)
+			printf("Possible\n");
+		else
+			printf("Impossible\n");
 	}
 	return 0;
 }
-
