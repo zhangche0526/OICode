@@ -65,6 +65,8 @@ void dinic()
 }
 int main()
 {
+	freopen("data.in","r",stdin);
+	freopen("data.out","w",stdout);
 	int i,u,v,l,r;
 	scanf("%d%d",&n,&m);
 	for(i=1;i<=m;i++)
