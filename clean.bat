@@ -1,5 +1,7 @@
-@echo off
-del /s/q *.exe
-del /s/q *.*~
-del /s/q *.in
-del /s/q *.out
+@echo off 
+for /R %%s in (*~) do (  
+del %%s  
+)  
+for /R %%s in (*.exe) do (  
+del %%s  
+)  

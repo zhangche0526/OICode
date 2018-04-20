@@ -5,6 +5,7 @@
 
 const int SIGMA_SIZE=26,MAXNODE=11000,MAXS=160;
 
+
 struct ACA
 {
 	int ch[MAXNODE][SIGMA_SIZE];
