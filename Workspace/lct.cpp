@@ -1,72 +1,97 @@
 #include<iostream>
 #include<cstdio>
-using namespace std;
-const int MAXN=3e5+5;
-int n,m;
-struct N
-{
-	int val,c[2],fa,xr,rev;
-} t[MAXN];
-int q[MAXN],tp;
-inline void upd(int x){t[x].xr=t[t[x].c[0]].xr^t[t[x].c[1]].xr^t[x].val;}
-inline void pushdown(int x)
-{if(t[x].rev){t[t[x].c[0]].rev^=1;t[t[x].c[1]].rev^=1;t[x].rev^=1;swap(t[x].c[0],t[x].c[1]);}}
+#include<cstring>
+using std::min;
+template<typename Ty>
+inline void umn(Ty &a,Ty b){a=min(a,b);}
+using std::max;
+template<typename Ty>
+inline void umx(Ty &a,Ty b){a=max(a,b);}
+typedef long long ll;
 
-inline bool isRt(int x){return t[t[x].fa].c[0]!=x&&t[t[x].fa].c[1]!=x;}
-inline bool iden(int x){return t[t[x].fa].c[1]==x;}
-void rot(int x)
+const int MAXN=3e5+5;
+const ll INF=1e18;
+
+int n,K;
+
+struct E{int next,to,val;} e[MAXN<<1];int ecnt,G[MAXN];
+void addEdge(int u,int v,int w){e[++ecnt]=(E){G[u],v,w};G[u]=ecnt;}
+void addEdge2(int u,int v,int w){addEdge(u,v,w);addEdge(v,u,w);}
+
+struct F{ll res;int k;F(ll res,int k):k(k),res(res){} F(){} } f[MAXN][3];
+bool operator <(const F &a,const F &b){return a.res<b.res||(a.res==b.res&&a.k<b.k);}
+bool operator >(const F &a,const F &b){return a.res>b.res||(a.res==b.res&&a.k>b.k);}
+F operator +(const F &a,const F &b){return F(a.res+b.res,a.k+b.k);}
+
+int dfnseq[MAXN],dcnt;
+int dpt[MAXN],mxd;
+
+int fa[MAXN];
+void predfs(int u)
 {
-	int y=t[x].fa,z=t[y].fa;
-	pushdown(y);pushdown(x);
-	bool xT=iden(x),yT=iden(y);
-	if(!isRt(y)) t[z].c[yT]=x;
-	t[x].fa=z;t[y].fa=x;t[t[x].c[!xT]].fa=y;
-	t[y].c[xT]=t[x].c[!xT];t[x].c[!xT]=y;
-	upd(y);upd(x);
-}
-void splay(int x)
-{
-	pushdown(x);
-	while(!isRt(x))
+	dfnseq[++dcnt]=u;
+	umx(mxd,dpt[u]);
+	for(int i=G[u];i;i=e[i].next)
 	{
-		int y=t[x].fa,z=t[y].fa;
-		if(!isRt(y))
-		{
-			if(iden(x)^iden(y)) rot(x);
-			else rot(y);
-		} rot(x);
+		int v=e[i].to;
+		if(v==fa[u]) continue;
+		dpt[v]=dpt[u]+1;
+		fa[v]=u;
+		predfs(v);
 	}
 }
-void access(int x){for(int y=0;x;y=x,x=t[x].fa) splay(x),t[x].c[1]=y,upd(x);}
 
-void makeroot(int x){access(x);splay(x);t[x].rev^=1;}
-
-int findRt(int x){access(x);splay(x);while(t[x].c[0]) x=t[x].c[0];return x;}
-
-void split(int x,int y){makeroot(x);access(y);splay(y);}
-
-void cut(int x,int y){split(x,y);if(t[y].c[0]==x) t[y].c[0]=0,t[x].fa=0;}
-
-void link(int x,int y){makeroot(x);t[x].fa=y;}
-
-inline int read()
+F ans;
+void dfs(ll V)
 {
-	int f=1,x=0;char ch;
-	do{ch=getchar();if(ch=='-')f=-1;}while(ch<'0'||ch>'9');
-	do{x=x*10+ch-'0';ch=getchar();}while(ch>='0'&&ch<='9');
-	return f*x;
+	for(int i=dcnt;i;i--)
+	{
+		int u=dfnseq[i];
+		f[u][0]=F(-V,1);
+		f[u][1]=F(-INF,0);
+		f[u][2]=F(0,0);	
+		for(int j=G[u];j;j=e[j].next)
+		{
+			int v=e[j].to;if(v==fa[u]) continue;
+			static F tmp[3];memcpy(tmp,f[u],sizeof f[u]);
+			for(int a=2;~a;a--) for(int b=2;~b;b--)
+			{
+				umx(f[u][a],tmp[a]+f[v][b]);
+				if(a<2&&b<2) umx(f[u][a+1],tmp[a]+f[v][b]+F(V+e[j].val,-1));
+			}
+		}
+	}
+	ans=f[1][0];for(int i=1;i<=2;i++) umx(ans,f[1][i]);
 }
+
 int main()
 {
-	n=read();m=read();
-	for(int i=1;i<=n;i++) t[i].xr=t[i].val=read();
-	while(m--)
+	freopen("lct.in","r",stdin);
+	freopen("lct.out","w",stdout);
+	int i;scanf("%d%d",&n,&K);K++;
+	ll l=0,r=0;
+	for(i=1;i<n;i++)
 	{
-		int opt=read(),x=read(),y=read();
-		if(opt==0){split(x,y);printf("%d\n",t[y].xr);}
-		else if(opt==1){if(findRt(x)!=findRt(y)) link(x,y);}
-		if(opt==2){if(findRt(x)==findRt(y)) cut(x,y);}
-		if(opt==3){access(x);splay(x);t[x].val=y;upd(x);}
+		int u,v,w;scanf("%d%d%d",&u,&v,&w);
+		addEdge2(u,v,w);
+		r+=max(0,w);umn(l,(ll)-w);
 	}
+	predfs(1);
+	while(l<=r)
+	{
+		ll mid=l+r>>1;
+		dfs(mid);
+		if(ans.k<K) r=mid-1;
+		else l=mid+1;
+	}
+	dfs(r);
+	printf("%lld",ans.res+(ll)K*r);
 	return 0;
 }
+/*
+5 1
+1 2 3
+2 3 5
+2 4 -3
+4 5 6
+*/

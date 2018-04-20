@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-  
 import struct 
-# Ö§³ÖÎÄ¼şÀàĞÍ  
-# ÓÃ16½øÖÆ×Ö·û´®µÄÄ¿µÄÊÇ¿ÉÒÔÖªµÀÎÄ¼şÍ·ÊÇ¶àÉÙ×Ö½Ú  
-# ¸÷ÖÖÎÄ¼şÍ·µÄ³¤¶È²»Ò»Ñù£¬ÉÙÔò2×Ö·û£¬³¤Ôò8×Ö·û  
+# æ”¯æŒæ–‡ä»¶ç±»å‹  
+# ç”¨16è¿›åˆ¶å­—ç¬¦ä¸²çš„ç›®çš„æ˜¯å¯ä»¥çŸ¥é“æ–‡ä»¶å¤´æ˜¯å¤šå°‘å­—èŠ‚  
+# å„ç§æ–‡ä»¶å¤´çš„é•¿åº¦ä¸ä¸€æ ·ï¼Œå°‘åˆ™2å­—ç¬¦ï¼Œé•¿åˆ™8å­—ç¬¦  
 def typeList():  
 	return {  "FFD8FF": "JPEG",  "89504E47": "PNG"}  
 
-# ×Ö½ÚÂë×ª16½øÖÆ×Ö·û´®  
+# å­—èŠ‚ç è½¬16è¿›åˆ¶å­—ç¬¦ä¸²  
 def bytes2hex(bytes):  
 	num = len(bytes)  
 	hexstr = u""  
@@ -17,15 +17,15 @@ def bytes2hex(bytes):
 			hexstr += t  
 	return hexstr.upper()  
 
-# »ñÈ¡ÎÄ¼şÀàĞÍ  
+# è·å–æ–‡ä»¶ç±»å‹  
 def filetype(filename):  
-	binfile = open(filename, 'rb') # ±ØĞè¶şÖÆ×Ö¶ÁÈ¡  
+	binfile = open(filename, 'rb') # å¿…éœ€äºŒåˆ¶å­—è¯»å–  
 	tl = typeList()  
 	ftype = 'unknown'
 	for hcode in tl.keys():  
-		numOfBytes = len(hcode) / 2 # ĞèÒª¶Á¶àÉÙ×Ö½Ú  
-		binfile.seek(0) # Ã¿´Î¶ÁÈ¡¶¼Òª»Øµ½ÎÄ¼şÍ·£¬²»È»»áÒ»Ö±Íùºó¶ÁÈ¡  
-		hbytes = struct.unpack_from("B"*numOfBytes, binfile.read(numOfBytes)) # Ò»¸ö "B"±íÊ¾Ò»¸ö×Ö½Ú  
+		numOfBytes = len(hcode) / 2 # éœ€è¦è¯»å¤šå°‘å­—èŠ‚  
+		binfile.seek(0) # æ¯æ¬¡è¯»å–éƒ½è¦å›åˆ°æ–‡ä»¶å¤´ï¼Œä¸ç„¶ä¼šä¸€ç›´å¾€åè¯»å–  
+		hbytes = struct.unpack_from("B"*numOfBytes, binfile.read(numOfBytes)) # ä¸€ä¸ª "B"è¡¨ç¤ºä¸€ä¸ªå­—èŠ‚  
 		f_hcode = bytes2hex(hbytes)  
 		if f_hcode == hcode:  
 			ftype = tl[hcode]  
@@ -34,3 +34,4 @@ def filetype(filename):
 	binfile.close()  
 
 filetype("1005.cpp")
+filetype("test.cpp")

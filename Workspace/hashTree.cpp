@@ -6,9 +6,9 @@ using std::cin;
 using std::cout;
 using std::endl;
 using std::string;
-typedef long long ll;
+typedef unsigned long long ll;
 
-const int MAXNODE=1005,SZ=32,PR[10]={2,3,5,7,11,13,17,19,23,29};
+const int MAXNODE=1e6+5,SZ=61,PR[20]={2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,51,53,57,59,61};
 const ll P=419340454199820289LL,seed=1331;
 class HT
 {
@@ -55,13 +55,14 @@ ll hash(string s)
 
 int main()
 {
+	freopen("hashTree.in","r",stdin);
+	freopen("hashTree.out","w",stdout);
 	int n,m,i;cin>>n>>m;
 	for(i=1;i<=n;i++)
 	{
 		string p,m;cin>>p>>m;
 		ht[hash(p)]=m;
 	}
-	cout<<"²éÑ¯£º"<<endl;
 	while(m--)
 	{
 		string p;cin>>p;

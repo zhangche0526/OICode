@@ -53,9 +53,9 @@ void makeroot(int x){access(x);splay(x);t[x].rev^=1;}
 
 int findRt(int x){access(x);splay(x);while(t[x].c[0]) x=t[x].c[0];return x;}
 
-void split(int x,int y){makeroot(x);access(y);splay(y);}
+void splice(int x,int y){makeroot(x);access(y);splay(y);}
 
-void cut(int x,int y){split(x,y);if(t[y].c[0]==x) t[y].c[0]=0,t[x].fa=0;}
+void cut(int x,int y){splice(x,y);if(t[y].c[0]==x) t[y].c[0]=0,t[x].fa=0;}
 
 void link(int x,int y){makeroot(y);t[y].fa=x;}
 
@@ -78,10 +78,10 @@ int main()
 		if(opt==1) link(x,y);
 		else if(opt==2) cut(x,y);
 		else if(opt==3) splay(x),t[x].val=y,upd(x);
-		else if(opt==4) split(x,y),printf("%d\n",t[x].mx);
-		else if(opt==5) split(x,y),printf("%d\n",t[x].sum);
+		else if(opt==4) splice(x,y),printf("%d\n",t[x].mx);
+		else if(opt==5) splice(x,y),printf("%d\n",t[x].sum);
 		else if(opt==6) printf("%d\n",findRt(x)==findRt(y));
-		else if(opt==7) split(x,y),add(x,read());
+		else if(opt==7) splice(x,y),add(x,read());
 	}
 	return 0;
 }

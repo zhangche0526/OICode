@@ -19,7 +19,7 @@ bool chs[MAXN];
 
 inline void preprd()
 {
-	sum=0;
+	int i,j;sum=0;
 	for(i=1;i<=n;i++) sum+=S[i];
 	if(sum<=t)
 	{
@@ -128,7 +128,7 @@ int main()
 {
 	int i;scanf("%d%d",&n,&t);
 	for(i=1;i<=n;i++) scanf("%d",S+i);
-	preprc();
+	preprd();
 	GA();
 	int ans=0,cnt=0;
 	for(i=1;i<=n;i++) if(chs[i]) ans+=S[i],cnt++;
